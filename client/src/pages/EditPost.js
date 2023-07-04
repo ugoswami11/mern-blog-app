@@ -11,7 +11,7 @@ export default function EditPost(){
     const [redirect, setRedirect] = useState(false);
 
     useEffect(()=>{
-        fetch(`http://localhost:5000/post/${id}`).then(response =>{
+        fetch(`https://mern-blog-api-amber.vercel.app/post/${id}`).then(response =>{
             response.json().then(postInfo=>{
                 setTtile(postInfo.title);
                 setSummary(postInfo.summary);
@@ -24,7 +24,7 @@ export default function EditPost(){
     async function updatePost(ev){
         ev.preventDefault();
 
-        const response = await fetch('http://localhost:5000/post',{
+        const response = await fetch('https://mern-blog-api-amber.vercel.app/post',{
             method: 'PUT',
             body: JSON.stringify({id, title, summary, content, imgLink}),
             headers: {'Content-Type': 'application/json'},

@@ -5,7 +5,7 @@ export default function Homepage(){
     const [posts, setPosts] = useState([]);
 
     useEffect(()=>{
-        fetch('http://localhost:5000/post').then( response => {
+        fetch('https://mern-blog-api-amber.vercel.app/post').then( response => {
             response.json().then(posts => {
                 setPosts(posts);
             });
