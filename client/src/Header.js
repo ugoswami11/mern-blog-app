@@ -3,17 +3,18 @@ import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 export default function Header(){
-  const {setUserInfo, userInfo} = useContext(UserContext);;
-
-  useEffect(() =>{
-    fetch('http://localhost:5000/profile',{
+  const {setUserInfo,userInfo} = useContext(UserContext);
+  useEffect(() => {
+    fetch('http://localhost:5000/profile', {
       credentials: 'include',
     }).then(response => {
-        response.json().then(userInfo => {
+      response.json().then(userInfo => {
         setUserInfo(userInfo);
-      })
-    })
-  },);
+      }).catch(function (error){
+        console.log(error);
+      });
+    });
+  }, []);
 
   function logout(){
     fetch('http://localhost:5000/logout', {

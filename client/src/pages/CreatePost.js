@@ -6,24 +6,20 @@ export default function CreatePost(){
     const [title, setTtile] = useState('');
     const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
-    const [files, setFiles] = useState('');
+    const [imgLink, setImgLink] = useState('');
     const [redirect, setRedirect] = useState(false);
 
     async function createNewPost(ev){
-        const data = new FormData();
-        data.set('title', title);
-        data.set('summary', summary);
-        data.set('content', content);
-        data.set('file', files[0]);
-
+        
         ev.preventDefault();
         const response = await fetch('http://localhost:5000/post', {
             method: 'POST',
-            body: data,
+            body: JSON.stringify({title, summary, content, imgLink}),
+            headers: {'Content-Type': 'application/json'},
             credentials: 'include', 
         });
 
-
+        console.log(response.body.JSON);
         if(response.ok){
             setRedirect(true);
         }else{
@@ -37,14 +33,15 @@ export default function CreatePost(){
     }
 
     return(
-        <form action="" onSubmit={createNewPost}>
+        <form  onSubmit={createNewPost}>
             <input type="title" placeholder={'Title'} value={title}
                 onChange={ev => setTtile(ev.target.value)}
             />
             <input type="summary" placeholder={'Summary'} value={summary}
                 onChange={ev => setSummary(ev.target.value)}
             />
-            <input type="file" onChange={ev => setFiles(ev.target.files)}/>
+            <input type="text" placeholder={'Image link'} value={imgLink} 
+                onChange={ev => setImgLink(ev.target.value)} />
             <Editor onChange={setContent} value={content} />
             <button style={{marginTop:'5px'}}>Create post</button>
         </form>

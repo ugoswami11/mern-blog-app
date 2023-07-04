@@ -7,8 +7,7 @@ export default function EditPost(){
     const [title, setTtile] = useState('');
     const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
-    const [files, setFiles] = useState('');
-    // const [coverImg, setCoverImg] = useState('');
+    const [imgLink, setImgLink] = useState('');
     const [redirect, setRedirect] = useState(false);
 
     useEffect(()=>{
@@ -17,25 +16,18 @@ export default function EditPost(){
                 setTtile(postInfo.title);
                 setSummary(postInfo.summary);
                 setContent(postInfo.content);
-                // setFiles(postInfo.coverImg); //does not work like this
+                setImgLink(postInfo.coverImg);
             })
         })
     },[id])
 
     async function updatePost(ev){
         ev.preventDefault();
-        const data = new FormData();
-        data.set('title', title);
-        data.set('summary', summary);
-        data.set('content', content);
-        data.set('id', id);
-        if(files?.[0]){
-            data.set('file', files?.[0]);
-        }
 
         const response = await fetch('http://localhost:5000/post',{
             method: 'PUT',
-            body: data,
+            body: JSON.stringify({id, title, summary, content, imgLink}),
+            headers: {'Content-Type': 'application/json'},
             credentials: 'include', 
         });
 
@@ -57,7 +49,9 @@ export default function EditPost(){
             <input type="summary" placeholder={'Summary'} value={summary}
                 onChange={ev => setSummary(ev.target.value)}
             />
-            <input type="file" onChange={ev => setFiles(ev.target.files)}/>
+            <input type="text" placeholder={'image link'} value={imgLink}
+                onChange={ev => setImgLink(ev.target.value)}
+            />
             <Editor onChange={setContent} value={content} />
             <button style={{marginTop:'5px'}}>Edit Post</button>
         </form>
