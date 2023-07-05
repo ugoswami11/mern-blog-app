@@ -14,7 +14,6 @@ const secret = "secretkey1233434422423423424131231313";
 app.use(cors({credentials:true, origin:'https://blogpoint-mern-blog.vercel.app'}));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/uploads', express.static(__dirname + '/uploads'));
 
 mongoose.connect('mongodb+srv://'+process.env.DB_USER+':'+process.env.DB_PASS+'@'+process.env.DB_HOST);
 
