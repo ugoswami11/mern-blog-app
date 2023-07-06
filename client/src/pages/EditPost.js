@@ -26,6 +26,7 @@ export default function EditPost(){
 
         const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/post',{
             method: 'PUT',
+            mode: 'no-cors',
             body: JSON.stringify({id, title, summary, content, imgLink}),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include', 

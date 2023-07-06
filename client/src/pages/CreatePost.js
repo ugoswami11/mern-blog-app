@@ -14,6 +14,7 @@ export default function CreatePost(){
         ev.preventDefault();
         const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/post', {
             method: 'POST',
+            mode: 'no-cors',
             body: JSON.stringify({title, summary, content, imgLink}),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include', 

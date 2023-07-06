@@ -9,7 +9,7 @@ export default function RegisterPage(){
         
         const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/register', {
             method: 'POST',
-            mode: 'cors',
+            mode: 'no-cors',
             body: JSON.stringify({username, password}),
             headers: {'Content-Type': 'application/json'},
         });

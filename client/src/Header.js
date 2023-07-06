@@ -20,6 +20,7 @@ export default function Header(){
     fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/logout', {
       credentials: 'include',
       method: 'POST',
+      mode: 'no-cors',
     })
     setUserInfo(null);
   }
