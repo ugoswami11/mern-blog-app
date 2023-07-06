@@ -6,11 +6,10 @@ const Post = require('./models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv').config();
 
 const app = express();
 const salt = bcrypt.genSaltSync(10);
-const secret = "secretkey1233434422423423424131231313";
+const secret = process.env.SECRET;
 app.use(cors({credentials:true, origin:'https://blogpoint-mern-blog.vercel.app'}));
 app.use(express.json());
 app.use(cookieParser());
