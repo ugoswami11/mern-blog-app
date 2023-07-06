@@ -7,7 +7,7 @@ export default function RegisterPage(){
     async function register(event){
         event.preventDefault();
         
-        const response = await fetch('https://mern-blog-api-amber.vercel.app/register', {
+        const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/register', {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({username, password}),
