@@ -12,7 +12,7 @@ export default function LoginPage(){
         ev.preventDefault();
         const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/login', {
             method: 'POST',
-            mode: 'no-cors',
+            mode: 'cors',
             body: JSON.stringify({username, password}),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',

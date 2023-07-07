@@ -10,7 +10,7 @@ export default function PostPage(){
     const {id} = useParams();
 
     useEffect(() => {
-        fetch(`https://mern-blog-api-git-main-ugoswami11.vercel.app/post/${id}`,{mode: "no-cors"}).then(
+        fetch(`https://mern-blog-api-git-main-ugoswami11.vercel.app/post/${id}`).then(
             response => {
                 response.json().then(postInfo =>{
                     setPostInfo(postInfo);
