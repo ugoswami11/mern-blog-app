@@ -5,7 +5,7 @@ export default function Homepage(){
     const [posts, setPosts] = useState([]);
 
     useEffect(()=>{
-        fetch('https://mern-blog-api-xuvz.onrender.com/post').then( response => {
+        fetch(global.config.apiUrl+'/post').then( response => {
             response.json().then(posts => {
                 setPosts(posts);
             });

@@ -6,6 +6,7 @@ const Post = require('./models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv').config();
 
 const app = express();
 const salt = bcrypt.genSaltSync(10);
@@ -44,7 +45,12 @@ app.post('/login', async function(req, res){
         //logged in
         jwt.sign({username, username_id: userDoc._id}, secret,{} , function(err, token){
             if(err) throw err;
-            res.cookie('token', token).json({
+            res.cookie('token', token
+            ,{
+                domain: 'blogpoint-mern-blog.vercel.app',
+                secure: true,
+            }
+            ).json({
                 id: userDoc._id,
                 username,
             });
@@ -55,9 +61,9 @@ app.post('/login', async function(req, res){
 });
 
 
-app.get('/profile', async function(req, res){
-    const {token}  = await req.cookies;
-    if(token===''){
+app.get('/profile', function(req, res){
+    const {token}  = req.cookies;
+    if(!token){
         res.status(200).json('User not logged in');
     }else{
         jwt.verify(token, secret, {}, function(err, info){

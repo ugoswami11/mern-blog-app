@@ -1,4 +1,5 @@
 import { useState } from "react";
+import '../Config';
 
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
@@ -7,7 +8,7 @@ export default function RegisterPage(){
     async function register(event){
         event.preventDefault();
         
-        const response = await fetch('https://mern-blog-api-xuvz.onrender.com/register', {
+        const response = await fetch(global.config.apiUrl+'/register', {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({username, password}),

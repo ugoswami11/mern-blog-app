@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import Editor from "../Editor";
+import '../Config';
 
 export default function EditPost(){
     const {id} = useParams();
@@ -11,7 +12,7 @@ export default function EditPost(){
     const [redirect, setRedirect] = useState(false);
 
     useEffect(()=>{
-        fetch(`https://mern-blog-api-xuvz.onrender.com/post/${id}`).then(response =>{
+        fetch(global.config.apiUrl+`/post/${id}`).then(response =>{
             response.json().then(postInfo=>{
                 setTtile(postInfo.title);
                 setSummary(postInfo.summary);
@@ -24,7 +25,7 @@ export default function EditPost(){
     async function updatePost(ev){
         ev.preventDefault();
 
-        const response = await fetch('https://mern-blog-api-xuvz.onrender.com/post',{
+        const response = await fetch(global.config.apiUrl+'/post',{
             method: 'PUT',
             mode: 'cors',
             body: JSON.stringify({id, title, summary, content, imgLink}),

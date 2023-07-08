@@ -1,11 +1,13 @@
 import { useContext, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import './Config';
 
 export default function Header(){
   const {setUserInfo,userInfo} = useContext(UserContext);
+
   useEffect(() => {
-    fetch('https://mern-blog-api-xuvz.onrender.com/profile', {
+    fetch(global.config.apiUrl+'/profile', {
       credentials: 'include',
       mode: 'cors'
     }).then(response => {
@@ -18,7 +20,7 @@ export default function Header(){
   }, []);
 
   function logout(){
-    fetch('https://mern-blog-api-xuvz.onrender.com/logout', {
+    fetch(global.config.apiUrl+'/logout', {
       credentials: 'include',
       method: 'POST',
       mode: 'cors',
@@ -26,7 +28,7 @@ export default function Header(){
     setUserInfo(null);
   }
 
-  const username = userInfo?.username;
+  const username = userInfo?userInfo.username: '';
 
   return(
     <header>

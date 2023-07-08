@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
+import '../Config';
 
 export default function LoginPage(){
     const [username, setUsername] = useState('');
@@ -10,7 +11,7 @@ export default function LoginPage(){
 
     async function login(ev){
         ev.preventDefault();
-        const response = await fetch('https://mern-blog-api-xuvz.onrender.com/login', {
+        const response = await fetch(global.config.apiUrl+'/login', {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({username, password}),

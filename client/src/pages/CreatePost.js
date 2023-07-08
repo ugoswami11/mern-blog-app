@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import Editor from "../Editor";
+import '../Config';
 
 export default function CreatePost(){
     const [title, setTtile] = useState('');
@@ -12,7 +13,7 @@ export default function CreatePost(){
     async function createNewPost(ev){
         
         ev.preventDefault();
-        const response = await fetch('https://mern-blog-api-xuvz.onrender.com/post', {
+        const response = await fetch(global.config.apiUrl+'/post', {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({title, summary, content, imgLink}),
