@@ -11,7 +11,7 @@ export default function EditPost(){
     const [redirect, setRedirect] = useState(false);
 
     useEffect(()=>{
-        fetch(`https://mern-blog-api-git-main-ugoswami11.vercel.app/post/${id}`).then(response =>{
+        fetch(`https://mern-blog-api-xuvz.onrender.com/post/${id}`).then(response =>{
             response.json().then(postInfo=>{
                 setTtile(postInfo.title);
                 setSummary(postInfo.summary);
@@ -24,7 +24,7 @@ export default function EditPost(){
     async function updatePost(ev){
         ev.preventDefault();
 
-        const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/post',{
+        const response = await fetch('https://mern-blog-api-xuvz.onrender.com/post',{
             method: 'PUT',
             mode: 'cors',
             body: JSON.stringify({id, title, summary, content, imgLink}),

@@ -10,7 +10,7 @@ export default function LoginPage(){
 
     async function login(ev){
         ev.preventDefault();
-        const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/login', {
+        const response = await fetch('https://mern-blog-api-xuvz.onrender.com/login', {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({username, password}),

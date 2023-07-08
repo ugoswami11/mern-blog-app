@@ -12,7 +12,7 @@ export default function CreatePost(){
     async function createNewPost(ev){
         
         ev.preventDefault();
-        const response = await fetch('https://mern-blog-api-git-main-ugoswami11.vercel.app/post', {
+        const response = await fetch('https://mern-blog-api-xuvz.onrender.com/post', {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({title, summary, content, imgLink}),
