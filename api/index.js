@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose')
-const User = require('../models/User');
-const Post = require('../models/Post');
+const User = require('./models/User');
+const Post = require('./models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -12,10 +12,7 @@ const salt = bcrypt.genSaltSync(10);
 const secret = process.env.SECRET;
 app.use(cors({
     credentials:true, 
-    origin:'https://blogpoint-mern-blog.vercel.app',
-    allowedHeaders:['Content-Type', 'Authorization'],
-    methods: ['GET','OPTIONS','PATCH','DELETE','POST','PUT']
-
+    origin:['https://blogpoint-mern-blog.vercel.app','http://localhost:3000']
 }));
 app.use(express.json());
 app.use(cookieParser());
