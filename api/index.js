@@ -49,6 +49,7 @@ app.post('/login', async function(req, res){
             ,{
                 domain: '.onrender.com',
                 secure: true,
+                maxAge: 3600000,
             }
             ).json({
                 id: userDoc._id,
