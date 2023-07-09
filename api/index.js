@@ -13,7 +13,7 @@ const salt = bcrypt.genSaltSync(10);
 const secret = process.env.SECRET;
 app.use(cors({
     credentials:true, 
-    origin:['https://blogpoint-mern-blog.vercel.app','http://localhost:3000']
+    origin:['https://blogpoint-7ido.onrender.com','http://localhost:3000']
 }));
 app.use(express.json());
 app.use(cookieParser());
@@ -47,7 +47,7 @@ app.post('/login', async function(req, res){
             if(err) throw err;
             res.cookie('token', token
             ,{
-                domain: 'blogpoint-mern-blog.vercel.app',
+                domain: req.hostname,
                 secure: true,
             }
             ).json({
