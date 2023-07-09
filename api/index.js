@@ -120,6 +120,22 @@ app.put('/post', async function(req, res){
     });
 });
 
+app.delete('/post/:id', async function(req, res) {
+    const { id } = req.params;
+  
+    // Delete the post by ID
+    await Post.findByIdAndDelete(id).then((deletedPost) => {
+        if (!deletedPost) {
+          return res.status(404).json({ error: 'Post not found' });
+        }
+        return res.status(200).json({ message: 'Post deleted successfully' });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ error: 'An error occurred while deleting the post' });
+      });
+  });
+
 app.get('/post', async function(req, res){
     const posts = await Post.find()
         .populate('author',['username'])

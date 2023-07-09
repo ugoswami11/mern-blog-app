@@ -35,16 +35,16 @@ export default function Header(){
       <Link to="/">Blogpoint</Link>
       <nav>
         {username && (
-          <>
-            <Link to="/create">Create new post</Link>
+          <div className="header-links">
+            <Link to="/create">Create post</Link>
             <Link to="/" onClick={logout}>Logout</Link>
-          </>
+          </div>
         )}
         {!username && (
-          <>
+          <div className="header-links">
             <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
-          </>
+          </div>
         )}
         
       </nav>
