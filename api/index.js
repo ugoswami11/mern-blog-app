@@ -47,7 +47,7 @@ app.post('/login', async function(req, res){
             if(err) throw err;
             res.cookie('token', token
             ,{
-                domain: req.hostname,
+                domain: '.onrender.com',
                 secure: true,
             }
             ).json({
