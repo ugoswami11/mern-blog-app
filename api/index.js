@@ -63,8 +63,8 @@ app.post('/login', async function(req, res){
 });
 
 
-app.get('/profile', function(req, res){
-    const {token}  = req.cookies;
+app.get('/profile', async function(req, res){
+    const {token}  = await req.cookies;
     if(!token){
         res.status(200).json('User not logged in');
     }else{

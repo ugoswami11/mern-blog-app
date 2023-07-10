@@ -6,8 +6,8 @@ import './Config';
 export default function Header(){
   const {setUserInfo,userInfo} = useContext(UserContext);
 
-  useEffect(() => {
-    fetch(global.config.apiUrl+'/profile', {
+  useEffect(async () => {
+    await fetch(global.config.apiUrl+'/profile', {
       credentials: 'include',
       mode: 'cors'
     }).then(response => {
