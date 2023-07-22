@@ -47,13 +47,13 @@ app.post('/login', async function(req, res){
             if(err) throw err;
             res.cookie('token', token
             ,{
-                domain: '.onrender.com',
-                // domain: req.hostname,
+                // domain: '.onrender.com',
+                domain: req.hostname,
                 // secure: true,
                 maxAge: 3600000,
             }
             ).json({
-                id: userDoc._id,
+                username_id: userDoc._id,
                 username,
             });
         });
