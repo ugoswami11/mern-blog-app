@@ -49,7 +49,7 @@ app.post('/login', async function(req, res){
             ,{
                 domain: '.onrender.com',
                 // domain: req.hostname,
-                // secure: true,
+                secure: false,
                 maxAge: 3600000,
             }
             ).json({
