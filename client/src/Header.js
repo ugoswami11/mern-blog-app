@@ -1,31 +1,26 @@
 import { useContext, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
-import './Config';
+import axios from "axios";
 
 export default function Header(){
-  const {setUserInfo,userInfo} = useContext(UserContext);
+  const {setUserInfo,userInfo, ready} = useContext(UserContext);
 
-  useEffect(async () => {
-    await fetch(global.config.apiUrl+'/profile', {
-      credentials: 'include',
-      mode: 'cors'
-    }).then(response => {
-      response.json().then(userInfo => {
-        setUserInfo(userInfo);
-      }).catch(function (error){
-        console.log(error);
-      });
-    });
+  useEffect(() => {
+    async function fetchData(){
+      const {data} = await axios.get('/profile');
+      setUserInfo(data);
+    }
+    fetchData();
   }, []);
 
   function logout(){
-    fetch(global.config.apiUrl+'/logout', {
-      credentials: 'include',
-      method: 'POST',
-      mode: 'cors',
-    })
+    axios.post('/logout');
     setUserInfo(null);
+  }
+
+  if(!ready){
+    return '';
   }
 
   const username = userInfo?userInfo.username: '';

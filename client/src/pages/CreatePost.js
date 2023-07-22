@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import Editor from "../Editor";
-import '../Config';
+import axios from "axios";
 
 export default function CreatePost(){
     const [title, setTtile] = useState('');
@@ -13,18 +13,12 @@ export default function CreatePost(){
     async function createNewPost(ev){
         
         ev.preventDefault();
-        const response = await fetch(global.config.apiUrl+'/post', {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({title, summary, content, imgLink}),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include', 
-        });
 
-        console.log(response.body.JSON);
-        if(response.ok){
+        try{
+            const response = await axios.post('/post',{title, summary, content, imgLink})
             setRedirect(true);
-        }else{
+        }
+        catch(err){
             alert('There was some error creating post');
         }
         

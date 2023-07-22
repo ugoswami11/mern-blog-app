@@ -1,5 +1,6 @@
 import { useState } from "react";
-import '../Config';
+// import '../Config';
+import axios from "axios";
 
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
@@ -7,13 +8,7 @@ export default function RegisterPage(){
 
     async function register(event){
         event.preventDefault();
-        
-        const response = await fetch(global.config.apiUrl+'/register', {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({username, password}),
-            headers: {'Content-Type': 'application/json'},
-        });
+        const response = await axios.post('/register',{username, password});
 
         if(response.status === 200){
             alert('Registration successfull');

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
+import axios from "axios";
 import Editor from "../Editor";
-import '../Config';
+
 
 export default function EditPost(){
     const {id} = useParams();
@@ -12,29 +13,24 @@ export default function EditPost(){
     const [redirect, setRedirect] = useState(false);
 
     useEffect(()=>{
-        fetch(global.config.apiUrl+`/post/${id}`).then(response =>{
-            response.json().then(postInfo=>{
-                setTtile(postInfo.title);
-                setSummary(postInfo.summary);
-                setContent(postInfo.content);
-                setImgLink(postInfo.coverImg);
-            })
-        })
+        async function fetchData(){
+            const {data} = await axios.get(`/post/${id}`);
+            setTtile(data.title);
+            setSummary(data.summary);
+            setContent(data.content);
+            setImgLink(data.coverImg);
+        }
+        fetchData();
     },[id])
 
     async function updatePost(ev){
         ev.preventDefault();
-
-        const response = await fetch(global.config.apiUrl+'/post',{
-            method: 'PUT',
-            mode: 'cors',
-            body: JSON.stringify({id, title, summary, content, imgLink}),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include', 
-        });
-
-        if(response.ok){
+        const postData = {id, title, summary, content, imgLink};
+        try{
+            await axios.put('/post',postData);
             setRedirect(true);
+        }catch(err){
+            alert('There was some error while updating post');
         }
     }   
 

@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import Post from '../Post'
+import axios from "axios";
 
 export default function Homepage(){
     const [posts, setPosts] = useState([]);
 
     useEffect(()=>{
-        fetch(global.config.apiUrl+'/post').then( response => {
-            response.json().then(posts => {
-                setPosts(posts);
-            });
-        });
+        async function fetchData(){
+            const {data} = await axios.get('/post');
+            setPosts(data);
+        }
+        fetchData();
     },[]);
 
     return(
