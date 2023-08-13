@@ -8,11 +8,6 @@ import CreatePost from './pages/CreatePost';
 import {UserContextProvider} from './UserContext';
 import PostPage from './pages/PostPage';
 import EditPost from './pages/EditPost';
-import axios from 'axios';
-
-axios.defaults.baseURL = "https://mern-blog-api-h79w.onrender.com";
-// axios.defaults.baseURL = "http://localhost:5000";
-axios.defaults.withCredentials= true;
 
 function App() {
   return (

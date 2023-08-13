@@ -6,19 +6,20 @@ const Post = require('./models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const fs = require('fs');
 const dotenv = require('dotenv').config();
 
 const app = express();
 const salt = bcrypt.genSaltSync(10);
-const secret = process.env.SECRET;
-app.use(cors({
-    credentials:true, 
-    origin:['https://blogpoint-7ido.onrender.com','http://localhost:3000']
-}));
+const secret = "secretkey1233434422423423424131231313";
+const upload = multer({dest:'uploads/'});
+app.use(cors({credentials:true, origin:'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
-mongoose.connect('mongodb+srv://'+process.env.DB_USER+':'+process.env.DB_PASS+'@'+process.env.DB_HOST);
+mongoose.connect('mongodb+srv://'+dotenv.parsed.DB_USER+':'+dotenv.parsed.DB_PASS+'@'+dotenv.parsed.DB_HOST);
 
 app.post('/register', async function(req, res){
     const {username, password} = req.body;
@@ -45,15 +46,8 @@ app.post('/login', async function(req, res){
         //logged in
         jwt.sign({username, username_id: userDoc._id}, secret,{} , function(err, token){
             if(err) throw err;
-            res.cookie('token', token
-            ,{
-                domain: '.onrender.com',
-                // domain: req.hostname,
-                secure: false,
-                maxAge: 3600000,
-            }
-            ).json({
-                username_id: userDoc._id,
+            res.cookie('token', token).json({
+                id: userDoc._id,
                 username,
             });
         });
@@ -63,12 +57,13 @@ app.post('/login', async function(req, res){
 });
 
 
-app.get('/profile', async function(req, res){
-    const {token}  = await req.cookies;
-    if(!token){
-        res.status(200).json('User not logged in');
+app.get('/profile', function(req, res){
+    const {token}  = req.cookies;
+    if(token==='' || token===undefined){
+        res.status(200).json('NotLoggedIn');
     }else{
         jwt.verify(token, secret, {}, function(err, info){
+            // if(err) throw err;
             res.json(info);
         });
     }
@@ -78,32 +73,45 @@ app.post('/logout', function(req, res){
     res.cookie('token', '').json('ok'); 
 });
 
-
-app.post('/post', async function(req, res){
+app.post('/post', upload.single('file'), async function(req, res){
+    const {originalname,path} = req.file;
+    const filenameSplit = originalname.split('.');
+    const ext = filenameSplit[filenameSplit.length-1];
+    const finalPath = path+"."+ext;
+    fs.renameSync(path, finalPath);
 
     const {token}  = req.cookies;
     jwt.verify(token, secret, {}, async function(err, info){
         if(err) throw err; 
-        const {title,summary,content,imgLink} = req.body; 
+        
+        const {title,summary,content} = req.body; 
         const postDoc= await Post.create({
             title,
             summary,
             content,
-            coverImg: imgLink,
+            coverImg: finalPath,
             author: info.username_id,
         });
         res.json(postDoc);
     });
 });
 
-
-app.put('/post', async function(req, res){
+app.put('/post', upload.single('file'), async function(req, res){
+    let finalPath=null;
+    
+    if(req.file){
+        const {originalname,path} = req.file;
+        const filenameSplit = originalname.split('.');
+        const ext = filenameSplit[filenameSplit.length-1];
+        const finalPath = path+"."+ext;
+        fs.renameSync(path, finalPath);
+    }
 
     const {token} = req.cookies;
 
     jwt.verify(token, secret, {}, async function(err, info){
         if(err) throw err;
-        const {id, title, summary, imgLink, content} = req.body;
+        const {id, title, summary, content} = req.body;
         const postDoc = await Post.findById(id);
         const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.username_id);
         
@@ -116,27 +124,11 @@ app.put('/post', async function(req, res){
             title, 
             summary, 
             content,
-            coverImg: imgLink ? imgLink : postDoc.coverImg,
+            coverImg: finalPath ? finalPath : postDoc.coverImg,
         });
         res.json(postDoc);
     });
 });
-
-app.delete('/post/:id', async function(req, res) {
-    const { id } = req.params;
-  
-    // Delete the post by ID
-    await Post.findByIdAndDelete(id).then((deletedPost) => {
-        if (!deletedPost) {
-          return res.status(404).json({ error: 'Post not found' });
-        }
-        return res.status(200).json({ message: 'Post deleted successfully' });
-      })
-      .catch((err) => {
-        console.error(err);
-        return res.status(500).json({ error: 'An error occurred while deleting the post' });
-      });
-  });
 
 app.get('/post', async function(req, res){
     const posts = await Post.find()
@@ -146,6 +138,21 @@ app.get('/post', async function(req, res){
     res.json(posts);
 });
 
+app.delete('/post/:id', async function(req, res) {
+    const { id } = req.params;
+  
+    // Delete the post by ID
+    await Post.findByIdAndDelete(id).then((deletedPost) => {
+        if (!deletedPost) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        return res.status(200).json({ message: 'Post deleted successfully' });
+    })
+    .catch((err) => {
+    console.error(err);
+    return res.status(500).json({ error: 'An error occurred while deleting the post' });
+    });
+});
 
 app.get('/post/:id', async function(req, res){
     const {id} = req.params;
@@ -157,6 +164,3 @@ app.get('/post/:id', async function(req, res){
 app.listen('5000', function(){
     console.log("Listening on port 5000");
 })
-
-
-module.exports = app;

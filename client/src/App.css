@@ -36,18 +36,9 @@ header a{
   color: #333;
 }
 
-header nav div.header-links{
+header nav{
   display: flex;
   gap: 1rem;
-  /* background-color: #6e90ff; */
-}
-
-div.header-links a{
-  background-color: #555;
-  padding: 5px 10px;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 1rem;
 }
 
 div.post{
@@ -140,7 +131,7 @@ div.post-page a{
   text-decoration: underline;
 }
 
-div.post-page h3{
+div.post-page h2{
   text-align: center;
   margin: 10px 0px 5px;
 }
@@ -180,6 +171,7 @@ div.post-page div.edit-row button.delete-button{
   background-color: #777;
   color: white;
   gap: 5px;
+  cursor: pointer;
 }
 
 div.post-page a.edit-button{

@@ -1,36 +1,46 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import axios from "axios";
 import Editor from "../Editor";
-
 
 export default function EditPost(){
     const {id} = useParams();
     const [title, setTtile] = useState('');
     const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
-    const [imgLink, setImgLink] = useState('');
+    const [files, setFiles] = useState('');
+    // const [coverImg, setCoverImg] = useState('');
     const [redirect, setRedirect] = useState(false);
 
     useEffect(()=>{
-        async function fetchData(){
-            const {data} = await axios.get(`/post/${id}`);
-            setTtile(data.title);
-            setSummary(data.summary);
-            setContent(data.content);
-            setImgLink(data.coverImg);
-        }
-        fetchData();
+        fetch(`http://localhost:5000/post/${id}`).then(response =>{
+            response.json().then(postInfo=>{
+                setTtile(postInfo.title);
+                setSummary(postInfo.summary);
+                setContent(postInfo.content);
+                // setFiles(postInfo.coverImg); //does not work like this
+            })
+        })
     },[id])
 
     async function updatePost(ev){
         ev.preventDefault();
-        const postData = {id, title, summary, content, imgLink};
-        try{
-            await axios.put('/post',postData);
+        const data = new FormData();
+        data.set('title', title);
+        data.set('summary', summary);
+        data.set('content', content);
+        data.set('id', id);
+        if(files?.[0]){
+            data.set('file', files?.[0]);
+        }
+
+        const response = await fetch('http://localhost:5000/post',{
+            method: 'PUT',
+            body: data,
+            credentials: 'include', 
+        });
+
+        if(response.ok){
             setRedirect(true);
-        }catch(err){
-            alert('There was some error while updating post');
         }
     }   
 
@@ -47,9 +57,8 @@ export default function EditPost(){
             <input type="summary" placeholder={'Summary'} value={summary}
                 onChange={ev => setSummary(ev.target.value)}
             />
-            <input type="text" placeholder={'image link'} value={imgLink}
-                onChange={ev => setImgLink(ev.target.value)}
-            />
+            <input type="file"
+             onChange={ev => setFiles(ev.target.files)} />
             <Editor onChange={setContent} value={content} />
             <button style={{marginTop:'5px'}}>Edit Post</button>
         </form>

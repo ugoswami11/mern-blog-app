@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import axios from "axios";
 
 export default function LoginPage(){
     const [username, setUsername] = useState('');
@@ -11,13 +10,26 @@ export default function LoginPage(){
 
     async function login(ev){
         ev.preventDefault();
-        try{
-            const {data} = await axios.post('/login',{username, password})
-            setUserInfo(data);
-            setRedirect(true);
-            
-        }catch(err){
-            alert('wrong credentials');
+        if(!username || !password){
+            alert('Please enter value in both username and password field');
+        }
+        else{
+            const response = await fetch('http://localhost:5000/login', {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({username, password}),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            });
+
+            if(response.ok){
+                response.json().then(userInfo => {
+                    setUserInfo(userInfo);
+                    setRedirect(true);
+                })
+            }else{
+                alert('wrong credentials');
+            }
         }
         
     }
@@ -27,9 +39,7 @@ export default function LoginPage(){
     }
 
     return(
-        <form className="login" action="" method="post"
-            onSubmit={login}
-        >
+        <form className="login" onSubmit={login}>
             <h1>Login</h1>
             <input type="text" name="" id="username" placeholder="username"
                 value={username}

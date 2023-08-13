@@ -1,45 +1,47 @@
 import { useContext, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
-import axios from "axios";
 
 export default function Header(){
-  const {setUserInfo,userInfo, ready} = useContext(UserContext);
+  const {setUserInfo, userInfo, ready} = useContext(UserContext);;
 
-  useEffect(() => {
-    async function fetchData(){
-      const {data} = await axios.get('/profile');
-      setUserInfo(data);
-    }
-    fetchData();
-  }, []);
+  useEffect(() =>{
+    fetch('http://localhost:5000/profile',{
+      credentials: 'include',
+    }).then(response => {
+        response.json().then(userInfo => {
+        setUserInfo(userInfo);
+      })
+    })
+  },[]);
 
   function logout(){
-    axios.post('/logout');
+    fetch('http://localhost:5000/logout', {
+      credentials: 'include',
+      method: 'POST',
+    })
     setUserInfo(null);
   }
 
-  if(!ready){
-    return '';
-  }
+  if(!ready) return '';
 
-  const username = userInfo?userInfo.username: '';
+  const username = userInfo?.username;
 
   return(
     <header>
       <Link to="/">Blogpoint</Link>
       <nav>
         {username && (
-          <div className="header-links">
-            <Link to="/create">Create post</Link>
+          <>
+            <Link to="/create">Create new post</Link>
             <Link to="/" onClick={logout}>Logout</Link>
-          </div>
+          </>
         )}
         {!username && (
-          <div className="header-links">
+          <>
             <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
-          </div>
+          </>
         )}
         
       </nav>
